@@ -3,7 +3,6 @@ package com.rookycode.api_inv.service;
 import com.rookycode.api_inv.entity.Cosmetic;
 import com.rookycode.api_inv.repository.CosmeticRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;

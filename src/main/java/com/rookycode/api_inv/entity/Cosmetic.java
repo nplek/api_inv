@@ -28,6 +28,10 @@ import lombok.NoArgsConstructor;
 @Table(name="cosmetic")
 public class Cosmetic implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6535934262825989591L;
     @JsonProperty("id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
