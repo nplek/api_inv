@@ -6,10 +6,10 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.rookycode.api_inv.entity.Cosmetic;
-import com.rookycode.api_inv.entity.ResponseDTO;
 import com.rookycode.api_inv.service.CosmeticService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.java.Log;
@@ -40,8 +41,9 @@ public class CosmeticController {
     }
 
     @GetMapping(value = "/cosmetics")
-    public ResponseEntity<List<Cosmetic>> getAllCosmetics() {
-        return new ResponseEntity<List<Cosmetic>>(cosmeticService.getAllCosmetics(), HttpStatus.OK);
+    public ResponseEntity<Page<Cosmetic>> getAllCosmetics(@RequestParam(name = "offset", defaultValue = "0") int offset,
+    @RequestParam(name = "limit", defaultValue = "5") int limit) {
+        return new ResponseEntity<Page<Cosmetic>>(cosmeticService.getPageCosmetics(offset, limit), HttpStatus.OK);
     }
     
     @PostMapping(value="/cosmetics",consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -49,23 +51,9 @@ public class CosmeticController {
         log.info("Controller post: " + cosmetic);
         Cosmetic cmt = cosmeticService.addCosmetic(cosmetic);
         return ResponseEntity.status(HttpStatus.CREATED).body(cmt);
-
-        /*ResponseDTO<?> responseDTO = ResponseDTO.builder()
-            .status(HttpStatus.CREATED.toString())
-            .body(cosmeticService.addCosmetic(cosmetic))
-            .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);*/
     }
 
-    /*@PostMapping(value="/cosmetics",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addCosmetic(@RequestBody Cosmetic cosmetic) {
-        log.info("Controller post: " + cosmetic);
-        //Cosmetic cmt = cosmeticService.addCosmetic(cosmetic);
-        //return ResponseEntity.status(HttpStatus.CREATED).body(cmt);
-        return ResponseEntity.status(HttpStatus.OK).body(cosmetic);
-    }*/
-
-    @PutMapping(value="/cosmetics")
+    @PutMapping(value="/cosmetics/{id}")
     public ResponseEntity<?> updateCosmetic(@PathVariable Long id, @RequestBody Cosmetic cosmetic) {
         Optional<Cosmetic> cmt = cosmeticService.updateCosmeticById(id, cosmetic);
         if (!cmt.isPresent()) {
@@ -74,7 +62,7 @@ public class CosmeticController {
         return ResponseEntity.ok(cmt);
     }
 
-    @DeleteMapping(value="/cosmetics/{id")
+    @DeleteMapping(value="/cosmetics/{id}")
     public ResponseEntity<?> deleteCosmetic(@PathVariable Long id) {
         if (!cosmeticService.deleteCosmetic(id)) {
             return ResponseEntity.notFound().build();

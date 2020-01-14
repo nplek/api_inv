@@ -26,13 +26,12 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.info(ex.getMessage());
         
-        //FieldError fieldError = ex.getBindingResult().getFieldError();
         List<FieldError> bindingResult = ex.getBindingResult().getFieldErrors();
-        //String[] code = fieldError.getField();
+        
         List<String> details = new ArrayList<>();
-        //details.add(fieldError.getArguments());
         for(FieldError fieldError: bindingResult){
-            details.add("Invalid " + fieldError.getRejectedValue() + " value submitted for " + fieldError.getField());
+            details.add(fieldError.getDefaultMessage());
+
         }
         ResponseDTO<?> responseDTO = ResponseDTO.builder()
             .status(status.toString())
@@ -53,17 +52,4 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(responseDTO);
     }
 
-    @ExceptionHandler(RecordNotFoundException.class)
-    public final ResponseEntity<?> handleUserNotFoundException(RecordNotFoundException ex, WebRequest request) {
-        List<String> details = new ArrayList<>();
-        log.info("NOT FOUND: " + ex.getLocalizedMessage());
-        details.add(ex.getLocalizedMessage());
-
-        ResponseDTO<?> response = ResponseDTO.builder()
-            .status(HttpStatus.NOT_FOUND.toString())
-            .message("Record Not Found")
-            .details(details)
-            .build();
-        return ResponseEntity.badRequest().body(response);
-    }
 }

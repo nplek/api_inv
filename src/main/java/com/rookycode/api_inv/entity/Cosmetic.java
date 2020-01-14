@@ -1,5 +1,7 @@
 package com.rookycode.api_inv.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,14 +26,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="cosmetic")
-public class Cosmetic {
+public class Cosmetic implements Serializable {
 
     @JsonProperty("id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @JsonProperty("name")
     @NotNull(message = "{cosmetic.name.notNull}")
-    @Size(min=3,max=60, message = "{cosemtic.name.size}")
+    @Size(min=3,max=60, message = "{cosmetic.name.size}")
     private String name;
     @JsonProperty("amount")
     @NotNull(message = "{cosmetic.amount.notNull}")
