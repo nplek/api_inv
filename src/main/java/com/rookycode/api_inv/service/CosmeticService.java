@@ -32,7 +32,6 @@ public class CosmeticService {
 		return cosmeticRepository.findById(id);
 	}
 
-	//@Cacheable(value="cosmeticPage", key="T(java.lang.String).format('%s-O:%s-L:%s',#root.methodName,#offset, #limit)", unless = "#result==null")
 	@Cacheable(value="cosmeticPage", key="T(java.lang.String).format('O:%s-L:%s',#offset, #limit)", unless = "#result==null")
 	public Page<Cosmetic> getPageCosmetics(int offset,int limit){
 		log.info("getPageCosmetics offset: " + offset + " limit: " + limit);

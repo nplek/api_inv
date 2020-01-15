@@ -23,11 +23,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
         .dataSource(dataSource)
         .usersByUsernameQuery("select email,password,enabled "
-            + "from dev_users "
+            + "from users "
             + "where email = ?")
         .authoritiesByUsernameQuery("select email,authority "
             + "from authorities "
