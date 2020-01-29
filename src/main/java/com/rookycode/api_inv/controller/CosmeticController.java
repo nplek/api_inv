@@ -66,6 +66,7 @@ public class CosmeticController {
         if (!cosmeticService.deleteCosmetic(id)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().build();
+        //return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
